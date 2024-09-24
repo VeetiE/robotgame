@@ -5,6 +5,8 @@ let BG3;
 let robotpicture;
 let paddle_width = 80;
 let paddle_height = 30;
+var robotlist = [];
+
 
 function preload() {
     BG = loadImage("images/trees1.png")
@@ -31,4 +33,20 @@ function windowResized() {
 function create_paddle(windowWidth){
     fill("#32a89d");
     rect(mouseX, windowWidth/3-50, paddle_width, paddle_height, 20, 20, 0,0)
+}
+class Robot {
+    constructor(){
+        this.Y = windowWidth / 3 / 2;
+        this.X = 0;
+        this.speed = random(1,4)
+    }
+    move(){
+        this.X = this.X + this.speed
+        image(robotpicture, this.X, this.Y, 30, 30)
+    }
+}
+function create_robots(){
+    let new_robot = new Robot();
+    robotlist.unshift(new_robot);
+    
 }
