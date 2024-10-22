@@ -7,6 +7,8 @@ let paddle_width = 80;
 let paddle_height = 30;
 var robotlist = [];
 var robotimer;
+var lives_left = 9;
+var points = 0;
 
 
 function preload() {
@@ -33,9 +35,11 @@ function draw() {
     image(BG2, 0,0, windowWidth, windowWidth / 3);
     image(BG3, 0,0, windowWidth, windowWidth / 3);
     create_paddle(windowWidth)
-    for (let robot of robotlist) {
-        robot.move();
-    }
+    textSize(35);
+    text("Robots: " + lives_left + "    Points: " + points, 10, 30)
+    robotlist.forEach(function(robot, which) {
+        robot.move(windowWidth);
+    });
 }
 function windowResized() {
     resizeCanvas(windowWidth, windowWidth / 3);
@@ -64,11 +68,27 @@ class Robot {
         this.Yspeed = this.Yspeed + 0.05
         if (this.Y + this.height / 2 > windowWidth / 3 - 50) {
             if (this.X > mouseX && this.X < mouseX + paddle_width) {
-                this.Yspeed = -abs(this.Yspeed)
+                this.Yspeed = -abs(this.Yspeed);
             }
         }
         this.Y = this.Y + this.Yspeed
         this.angle = this.angle + 1
-        image(robotpicture, this.X, this.Y, 100, 100)
+        push();
+        translate(this.X, this.Y);
+        rotate(this.angle);
+        imageMode(CENTER);
+        image(robotpicture, 0, 0, this.width, this.height);
+        pop();
+        angleMode(DEGREES);
     }
+}
+function gamerOver() {
+    clearTimeout(robotimer);
+    noLoop();
+    push();
+    fill("white");
+    textSize(50);
+    textAlign(CENTER);
+    text("GAME OVER", windowWidth / 2, windowWidth / 3 / 2);
+    pop();
 }
